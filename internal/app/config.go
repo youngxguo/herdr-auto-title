@@ -18,14 +18,15 @@ import (
 // Environment variables Auto Title reads. The configuration file holds the
 // same names; see docs/architecture/configuration.md.
 const (
-	EnvDebug      = "HERDR_AUTO_TITLE_DEBUG"
-	EnvPoll       = "HERDR_AUTO_TITLE_POLL_MS"
-	EnvMaxLength  = "HERDR_AUTO_TITLE_MAX_LENGTH"
-	EnvBranchMax  = "HERDR_AUTO_TITLE_BRANCH_MAX"
-	EnvPosition   = "HERDR_AUTO_TITLE_POSITION"
-	EnvManual     = "HERDR_AUTO_TITLE_MANUAL_FILE"
-	EnvTranscript = "HERDR_AUTO_TITLE_TRANSCRIPT"
-	EnvAgentName  = "HERDR_AUTO_TITLE_AGENT_NAME"
+	EnvDebug       = "HERDR_AUTO_TITLE_DEBUG"
+	EnvPoll        = "HERDR_AUTO_TITLE_POLL_MS"
+	EnvMaxLength   = "HERDR_AUTO_TITLE_MAX_LENGTH"
+	EnvBranchMax   = "HERDR_AUTO_TITLE_BRANCH_MAX"
+	EnvPosition    = "HERDR_AUTO_TITLE_POSITION"
+	EnvManual      = "HERDR_AUTO_TITLE_MANUAL_FILE"
+	EnvTranscript  = "HERDR_AUTO_TITLE_TRANSCRIPT"
+	EnvAgentName   = "HERDR_AUTO_TITLE_AGENT_NAME"
+	EnvPreferAgent = "HERDR_AUTO_TITLE_PREFER_AGENT"
 )
 
 // ConfigFile is the configuration file, read from the same directory the
@@ -61,6 +62,9 @@ type Config struct {
 	// what it is working on. Turned off, a pane whose agent has said nothing
 	// is named like any other pane in that directory.
 	ShowAgentName bool
+	// PreferAgentPane names a tab after its agent pane even when another pane
+	// is focused, so opening an editor beside the agent leaves the title alone.
+	PreferAgentPane bool
 }
 
 // LoadConfig reads configuration from the configuration file and the
@@ -90,6 +94,7 @@ func LoadConfig() (Config, []string) {
 	cfg.ShowPosition = fromEnv(&warnings, EnvPosition, cfg.ShowPosition, boolean)
 	cfg.ReadTranscripts = fromEnv(&warnings, EnvTranscript, cfg.ReadTranscripts, boolean)
 	cfg.ShowAgentName = fromEnv(&warnings, EnvAgentName, cfg.ShowAgentName, boolean)
+	cfg.PreferAgentPane = fromEnv(&warnings, EnvPreferAgent, cfg.PreferAgentPane, boolean)
 	// A path needs neither parsing nor checking, so it does not go through
 	// fromEnv: any string the user set is the path they meant, and an empty
 	// one asks for locks that do not outlive the process.

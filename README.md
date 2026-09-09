@@ -138,6 +138,7 @@ restarts**, with the same `herdr server stop` the install needs.
 | `HERDR_AUTO_TITLE_MANUAL_FILE` | `manual-names.json`, next to `config.env` | Where tabs you renamed by hand are remembered; empty keeps them in memory  |
 | `HERDR_AUTO_TITLE_TRANSCRIPT`  | `true`                                    | Read an agent's own session transcript when it has not titled its terminal |
 | `HERDR_AUTO_TITLE_AGENT_NAME`  | `true`                                    | Put the agent's name in front of what an agent pane is doing               |
+| `HERDR_AUTO_TITLE_PREFER_AGENT` | `false`                                  | Name a tab after its agent pane even while another pane in it is focused   |
 
 ## Documentation
 

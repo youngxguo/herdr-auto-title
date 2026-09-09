@@ -48,9 +48,10 @@ func run() error {
 	}
 
 	chain := resolver.Default(resolver.Options{
-		MaxLength:     cfg.MaxLength,
-		BranchMax:     cfg.BranchMax,
-		HideAgentName: !cfg.ShowAgentName,
+		MaxLength:       cfg.MaxLength,
+		BranchMax:       cfg.BranchMax,
+		HideAgentName:   !cfg.ShowAgentName,
+		PreferAgentPane: cfg.PreferAgentPane,
 	})
 
 	var titles resolver.TitleResolver = chain

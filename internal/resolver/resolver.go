@@ -113,13 +113,18 @@ type Options struct {
 	// way round so that the zero value keeps the name, which is what a resolver
 	// built without options wants.
 	HideAgentName bool
+	// PreferAgentPane names a tab after the pane running an agent even while
+	// another pane in it is focused, so an editor opened beside the agent does
+	// not take the title over.
+	PreferAgentPane bool
 }
 
 // Deterministic resolves titles from a fixed priority list of sources.
 type Deterministic struct {
-	sources       []Source
-	maxLength     int
-	hideAgentName bool
+	sources         []Source
+	maxLength       int
+	hideAgentName   bool
+	preferAgentPane bool
 }
 
 var _ TitleResolver = (*Deterministic)(nil)
@@ -137,9 +142,10 @@ func New(opts Options, sources ...Source) *Deterministic {
 	})
 
 	return &Deterministic{
-		sources:       ordered,
-		maxLength:     opts.MaxLength,
-		hideAgentName: opts.HideAgentName,
+		sources:         ordered,
+		maxLength:       opts.MaxLength,
+		hideAgentName:   opts.HideAgentName,
+		preferAgentPane: opts.PreferAgentPane,
 	}
 }
 
@@ -160,7 +166,7 @@ func Default(opts Options) *Deterministic {
 // Resolve names a tab in three steps: ask the sources what they see, drop the
 // parts that only repeat something already on screen, and assemble the rest.
 func (d *Deterministic) Resolve(tab state.TabState) Decision {
-	found := d.collect(state.SelectContextPane(tab))
+	found := d.collect(state.SelectContextPaneWith(tab, d.preferAgentPane))
 
 	parts := found.parts
 	if d.hideAgentName {
